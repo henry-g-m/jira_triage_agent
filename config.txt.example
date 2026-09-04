@@ -1,0 +1,13 @@
+# Local configuration values for the Jira triage agent.
+# Copy this file to config.txt and replace the placeholder values.
+
+OPENAI_API_KEY=
+OPENAI_BASE_URL=https://api.openai.com/v1
+OPENAI_MODEL=text-embedding-3-large
+JIRA_COSMOS_ENDPOINT=
+JIRA_COSMOS_USERNAME=
+JIRA_COSMOS_API_KEY=
+JIRA_COSMOS_DATABASE=jira_db
+JIRA_COSMOS_COLLECTIONS=
+JIRA_VECTOR_FIELD=Vector
+COSMOS_TOP_K=5
