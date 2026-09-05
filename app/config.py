@@ -32,6 +32,9 @@ class Settings:
     openai_api_key: str
     openai_base_url: str = ""
     openai_model: str = "text-embedding-3-large"
+    llm_api_key: str = ""
+    llm_base_url: str = ""
+    llm_model: str = "gpt-4o-mini"
     openai_api_version: str = "2024-02-01"
     openai_use_azure: bool = False
     jira_cosmos_endpoint: str = ""
@@ -91,10 +94,27 @@ class Settings:
             or "openai.azure.com" in openai_base_url.lower()
         )
 
+        llm_model = (
+            os.getenv("LLM_MODEL")
+            or os.getenv("OPENAI_CHAT_DEPLOYMENT")
+            or os.getenv("AZURE_OPENAI_CHAT_DEPLOYMENT")
+            or os.getenv("OPENAI_CHAT_MODEL")
+            or "kimi-k3"
+        )
+        llm_api_key = os.getenv("LLM_API_KEY") or os.getenv("OPENAI_API_KEY") or openai_api_key
+        llm_base_url = (
+            os.getenv("LLM_BASE_URL")
+            or os.getenv("OPENAI_LLM_BASE_URL")
+            or openai_base_url
+        )
+
         return cls(
             openai_api_key=openai_api_key,
             openai_base_url=openai_base_url,
             openai_model=os.getenv("OPENAI_MODEL", "text-embedding-3-large"),
+            llm_api_key=llm_api_key,
+            llm_base_url=llm_base_url,
+            llm_model=llm_model,
             openai_api_version=os.getenv("OPENAI_API_VERSION", "2024-02-01"),
             openai_use_azure=openai_use_azure,
             jira_cosmos_endpoint=jira_cosmos_endpoint,

@@ -4,6 +4,13 @@
 OPENAI_API_KEY=
 OPENAI_BASE_URL=https://api.openai.com/v1
 OPENAI_MODEL=text-embedding-3-large
+OPENAI_CHAT_MODEL=gpt-4o-mini
+# For Azure OpenAI, this is the deployment name shown in Azure OpenAI Studio, not the underlying model family.
+OPENAI_CHAT_DEPLOYMENT=
+# Query expansion and recommendation use the LLM configured below.
+LLM_API_KEY=
+LLM_MODEL=moonshotai/kimi-k3
+LLM_BASE_URL=
 JIRA_COSMOS_ENDPOINT=
 JIRA_COSMOS_USERNAME=
 JIRA_COSMOS_API_KEY=

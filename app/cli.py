@@ -20,10 +20,10 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     settings = Settings.from_env()
     retriever = JiraVectorRetriever(settings)
-    triage_agent = TicketTriageAgent()
+    triage_agent = TicketTriageAgent.from_settings(settings)
 
     matches = retriever.search(args.description, top_k=args.top_k)
-    recommendation = triage_agent.recommend(matches)
+    recommendation = triage_agent.recommend(matches, ticket_description=args.description)
 
     payload = {
         "project": recommendation.project,
