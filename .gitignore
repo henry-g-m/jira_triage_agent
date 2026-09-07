@@ -10,3 +10,5 @@ __pycache__/
 .pytest_cache/
 .mypy_cache/
 .coverage
+/app/cosmosdb_client/config_azure.txt
+/app/loader/config_loader.txt
