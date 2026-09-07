@@ -12,3 +12,4 @@ __pycache__/
 .coverage
 /app/cosmosdb_client/config_azure.txt
 /app/loader/config_loader.txt
+/output/

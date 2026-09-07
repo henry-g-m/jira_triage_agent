@@ -1,0 +1,32 @@
+# Sample configuration for app/loader/jira_projects_loader.py
+# Copy to config_loader.txt (or set environment variables) and edit values before running.
+
+# Cosmos DB account endpoint (URI)
+COSMOS_ACCOUNT_ENDPOINT=https://your-cosmos-account.documents.azure.com:443/
+# Cosmos DB primary key (DO NOT COMMIT SECRETS)
+COSMOS_ACCOUNT_KEY=REPLACE_WITH_YOUR_PRIMARY_KEY
+
+# Target database and container inside Cosmos
+COSMOS_DATABASE=jira_db
+COSMOS_CONTAINER=jira_vectors
+
+# Partition key path used by the container (must start with /)
+PARTITION_KEY_PATH=/ProjectKey
+
+# Field name to store embedding vectors
+VECTOR_FIELD=Vector
+
+# Local folder (relative to repo root) containing per-collection JSON exports
+OUTPUT_DIR=output
+
+# How many documents to upsert in a single logical batch (loader currently upserts one-by-one,
+# but this sets an intended batch size for future batching)
+BATCH_SIZE=50
+
+# Optional: override OpenAI model (falls back to Settings.from_env OPENAI_MODEL)
+# OPENAI_MODEL=text-embedding-3-large
+
+# Notes:
+# - Prefer to keep secrets in environment variables or an OS secret store, not in this file.
+# - To run the loader: .venv\Scripts\python.exe -m app.loader.jira_projects_loader
+# - Ensure OPENAI_API_KEY (or Azure OpenAI settings) are available to generate embeddings.
