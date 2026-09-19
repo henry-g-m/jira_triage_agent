@@ -1,0 +1,53 @@
+= Secrets handling in this project =
+
+Secrets are handled in a simple GitHub Actions + Terraform pattern, not a full Azure Key Vault flow.
+
+Where it is configured:
+- GitHub Actions secrets:
+  - .github/workflows/build-and-push-acr.yml
+  - Example secrets used there:
+    - AZURE_CREDENTIALS
+    - ACR_REGISTRY
+    - ACR_USERNAME
+    - ACR_PASSWORD
+    - RAG_API_KEY
+    - COSMOS_ACCOUNT_ENDPOINT
+    - COSMOS_ACCOUNT_KEY
+    - COSMOS_DATABASE
+    - COSMOS_CONTAINER
+    - OPENAI_API_KEY
+    - AZURE_RESOURCE_GROUP
+    - ACR_NAME
+    - AZURE_LOCATION
+- Terraform deployment inputs:
+  - infra/terraform/main.tf
+  - infra/terraform/variables.tf
+  - The workflow passes values into Terraform via TF_VAR_* env vars.
+- App runtime config:
+  - .env.example lists env vars expected by the app, such as OPENAI_API_KEY, LLM_API_KEY, etc.
+  - app/jira_rag_service/main.py reads RAG_API_KEY for API auth.
+
+What the project is doing today:
+- Build/deploy secrets are stored in GitHub repo Actions secrets.
+- Azure login uses `azure/login@v1` with `creds: ${{ secrets.AZURE_CREDENTIALS }}`.
+- ACR login uses `docker/login-action` with ACR credentials from secrets.
+- Terraform can define Container App secrets via a `secrets` map in `infra/terraform/main.tf`, but the current workflow only passes env variables, not a full secret map. It even has:
+  - “Optional: set container app secrets” step, but it is only a comment reminder.
+- The container app’s runtime config currently injects plain envs like:
+  - COSMOS_ACCOUNT_ENDPOINT
+  - COSMOS_DATABASE
+  - COSMOS_CONTAINER
+  which are not secret refs unless you explicitly add them to Terraform’s `secrets` block.
+
+Important caveat:
+- This project does not yet have a hardened Azure Key Vault integration.
+- The current setup is acceptable for a starter deployment, but in production you should move secrets to:
+  - Azure Key Vault
+  - Container App secrets or managed identity
+  - GitHub OIDC + Azure federated identity instead of static service principal JSON
+
+So the short answer: secrets are configured in GitHub Actions and passed into Terraform/Azure deployment, not in the codebase itself. The relevant files are:
+- .github/workflows/build-and-push-acr.yml
+- infra/terraform/main.tf
+- infra/terraform/variables.tf
+- .env.example
